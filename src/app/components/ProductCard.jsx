@@ -1,21 +1,23 @@
 
 import StockTag from "./StockTag";
 import Badge from "./Badge";
+import { parseISO, format } from "date-fns";
+
 
 export default function ProductCard({ product }) {
   const isOutOfStock = product.stock === 0;
+  const fecha = parseISO(product.ultModificacion);
+  const fechaFormateada = format(fecha, "dd/MM/yyyy");
 
-  const formatName = (str) =>
-    str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
-    <div className="relative flex flex-col justify-between w-full h-[400px] rounded-3xl bg-white p-5 text-center shadow-md transition hover:shadow-lg">
+    <div className="relative flex flex-col justify-between w-full h-[450px] rounded-3xl bg-white p-5 text-center shadow-md transition hover:shadow-lg">
       {/* Etiqueta “Sin Stock” */}
       {isOutOfStock && <StockTag />}
 
       {/* Imagen */}
       <img
-        src="../images/7790710000218.png"
+        src="../images/prueba.jpg"
         alt={product.descripcion}
         className="w-[150px] h-auto mx-auto"
         loading="lazy"
@@ -24,15 +26,19 @@ export default function ProductCard({ product }) {
 
 
       {/* Nombre */}
-      <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
+      <h3 className="text-sm font-semibold text-gray-900  mb-1">
         {product.descripcion}
-        {product.capacidad && <Badge>{product.capacidad}</Badge>}
       </h3>
 
       {/* Proveedor */}
       <p className="text-sm font-medium text-gray-700 mb-1">
-        {formatName(product.proveedorNombre)}
+        {product.proveedorNombre}
       </p>
+
+      {/* Proveedor */}
+        {/* <p className="text-sm font-medium text-gray-700 mb-1">
+        {product.fabrica}
+      </p> */}
 
       {/* Datos técnicos */}
       <p className="text-xs text-gray-400 leading-5 mb-3">
@@ -41,6 +47,9 @@ export default function ProductCard({ product }) {
         UxB | {product.unidadesPorBulto}
         <br />
         Stock: {product.stock} unidades
+        <br />
+        Ult modificación: {fechaFormateada}
+        <br />
       </p>
 
       {/* Botón */}
