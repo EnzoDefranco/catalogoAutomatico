@@ -42,7 +42,7 @@ export default function RootLayout({ children }) {
         </div> */}
         {/* Aquí se renderiza el contenido de las páginas */} 
 
-        <div className="h-[calc(100vh-5rem)] container mx-auto">{children}</div>
+        <div className="h-[calc(100vh-5rem)] px-4 sm:px-6 md:px-8 pt-6">{children}</div>
       </body>
     </html>
   );

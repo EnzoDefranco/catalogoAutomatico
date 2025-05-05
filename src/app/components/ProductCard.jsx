@@ -1,34 +1,56 @@
-// function ProductCard({ product }) {
-//   return (
-//     <div className="bg-white rounded-lg border-gray-800 mb-3 p-4">
-//       <h1 className="text-md font-bold text-black">{product.descripcion}</h1>
 
+import StockTag from "./StockTag";
+import Badge from "./Badge";
 
-//     </div>
-//   );
-// }
+export default function ProductCard({ product }) {
+  const isOutOfStock = product.stock === 0;
 
-// export default ProductCard;
+  const formatName = (str) =>
+    str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 
-
-function ProductCard({ product }) {
   return (
-  <div className="mx-auto mt-11 w-80 transform overflow-hidden rounded-lg bg-white dark:bg-slate-800 shadow-md duration-300 hover:scale-105 hover:shadow-lg">
-    <img className="h-48 w-full object-cover object-center" src="https://images.unsplash.com/photo-1674296115670-8f0e92b1fddb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="Product Image" />
-    <div className="p-4">
-      <h2 className="text-md font-medium dark:text-white text-gray-900">{product.descripcion}</h2>
-      {/* <p className=" text-sm text-base dark:text-gray-300 text-gray-700">EAN {product.eanUnidad}</p> */}
-      <p className=" text-sm text-base dark:text-gray-300 text-gray-700">{product.proveedorNombre}</p>
-      <p className=" text-sm text-base dark:text-gray-300 text-gray-700">UxB: {product.unidadesPorBulto}</p>
-      <div className="flex items-center">
-        <p className="mr-2 text-lg font-semibold text-gray-900 dark:text-white">${product.precioLista4}</p>
-        <p className="text-base  font-medium text-gray-500 line-through dark:text-gray-300">$25.00</p>
-        <p className="ml-auto text-base font-medium text-green-500">20% off</p>
+    <div className="relative flex flex-col justify-between w-full h-[400px] rounded-3xl bg-white p-5 text-center shadow-md transition hover:shadow-lg">
+      {/* Etiqueta “Sin Stock” */}
+      {isOutOfStock && <StockTag />}
+
+      {/* Imagen */}
+      <img
+        src="../images/7790710000218.png"
+        alt={product.descripcion}
+        className="w-[150px] h-auto mx-auto"
+        loading="lazy"
+        
+      />
+
+
+      {/* Nombre */}
+      <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
+        {product.descripcion}
+        {product.capacidad && <Badge>{product.capacidad}</Badge>}
+      </h3>
+
+      {/* Proveedor */}
+      <p className="text-sm font-medium text-gray-700 mb-1">
+        {formatName(product.proveedorNombre)}
+      </p>
+
+      {/* Datos técnicos */}
+      <p className="text-xs text-gray-400 leading-5 mb-3">
+        Cod. Barras: {product.eanUnidad}
+        <br />
+        UxB | {product.unidadesPorBulto}
+        <br />
+        Stock: {product.stock} unidades
+      </p>
+
+      {/* Botón */}
+      <div>
+        <button className="w-full rounded-full bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-600">
+          INICIÁ SESIÓN
+          <br />
+          para ver precio
+        </button>
       </div>
     </div>
-  </div>
   );
 }
-
-export default ProductCard;
-
