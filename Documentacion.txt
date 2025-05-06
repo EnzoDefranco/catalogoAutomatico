@@ -1,0 +1,121 @@
+Vamos a desglosar cada paso del flujo, profundizando en qué ocurre internamente y por qué cada capa existe:
+
+1. Cliente (Browser)
+El usuario ve la página de catálogo y, por ejemplo, selecciona “Sin stock” o escribe un precio mínimo.
+
+Al cambiar un filtro, React (Next.js) actualiza la URL con router.push("/Catalogo?stock=0") o al hacer click en un <Link>.
+
+¿Por qué?
+
+Mantener el estado de filtros en la URL permite bookmark, compartir enlaces y navegación “SPA” (sin recarga completa).
+
+2. ProductsList (Client Component)
+Está marcado con "use client", así puede usar hooks de React.
+
+Hook useSearchParams() lee los parámetros actuales de la barra de direcciones (por ejemplo { stock: "0" }).
+
+Construye un objeto filters = { stock: 0 }.
+
+Object.entries(filters).filter(...) elimina entradas sin valor.
+
+new URLSearchParams(entries).toString() genera la cadena "stock=0".
+
+Hook useSWR("/api/products?stock=0", fetcher):
+
+Comprueba si ya tiene en caché datos para esa key.
+
+Si no, hace fetch("/api/products?stock=0").
+
+Expone estados { data, error, isLoading } para el render.
+
+¿Por qué SWR?
+
+Caché automática y revalidación en background.
+
+Experiencia responsiva: muestra datos antiguos mientras llegan los nuevos.
+
+Reintentos automáticos en caso de fallo.
+
+3. API Route (Next.js Serverless Function)
+El request llega a /api/products?stock=0.
+
+Next.js detecta el archivo app/api/products/route.js y ejecuta su función GET(request).
+
+Dentro de GET:
+
+new URL(request.url) parsea la URL completa.
+
+url.searchParams.get("stock") extrae "0".
+
+Crea filters = { stock: 0 }.
+
+Llama ProductService.findAll(filters).
+
+Finalmente devuelve NextResponse.json({ data, meta }), que SWR recibe como JSON.
+
+¿Por qué API Routes?
+
+Aíslan la capa HTTP: manejo de métodos (GET/POST), códigos de estado (200, 400, 404, 500), CORS, autenticación.
+
+Actúan como “micro‑servicio” interno, reutilizable por otros clientes (móvil, Postman).
+
+4. ProductService (Service Layer)
+Método findAll({ stock: 0 }):
+
+Construye la sentencia SQL base "SELECT * FROM articulosl4".
+
+Añade WHERE stock = ? y pone params = [0].
+
+Llama conn.query(sql, params).
+
+Método findById(id) similar para un solo registro.
+
+¿Por qué Service Layer?
+
+Centraliza toda la lógica de datos: SQL dinámico, validaciones de filtros, transformaciones de resultados.
+
+Facilita tests unitarios: puedes llamar findAll({ stock: 0 }) sin arrancar Next.js.
+
+Si cambia la estructura de la BD, sólo editas aquí.
+
+5. MySQL Connection Pool (conn)
+serverless-mysql mantiene un pool de conexiones: un conjunto de conexiones abiertas a la BD que se reutilizan.
+
+Cuando llamas conn.query(...), el pool:
+
+Toma una conexión libre o abre una nueva (hasta connectionLimit).
+
+Ejecuta la query en esa conexión.
+
+Devuelve el resultado y libera la conexión para el siguiente uso.
+
+¿Por qué un pool?
+
+Evita el overhead de abrir/cerrar conexiones en cada request.
+
+Controla el número máximo de conexiones simultáneas.
+
+Mejora el rendimiento y la escalabilidad.
+
+6. Base de datos MySQL
+Recibe la query preparada, la ejecuta y devuelve filas.
+
+La respuesta viaja de vuelta al pool, luego al service, luego al API Route, y finalmente al cliente.
+
+7. React re‑renderiza ProductCard
+SWR resuelve la promesa y expone data.data (el array de productos).
+
+React itera data.data.map(...) y renderiza un <ProductCard> por cada producto.
+
+Solo esa parte del DOM se actualiza: el resto de la página permanece estático, sin recarga completa.
+
+Beneficios globales en entornos empresariales
+Aspecto	Beneficio empresarial
+Modularidad	Equipos frontend y backend trabajan por separado.
+Mantenibilidad	Cambios en BD o SQL no rompen la UI ni routing.
+Testabilidad	Tests unitarios de service; integración de API; UI.
+Seguridad	Credenciales y queries quedan en servidor, no en cliente.
+Rendimiento	Pool de conexiones + SWR caching + navegación SPA.
+Escalabilidad	API Routes pueden extraerse a micro‑servicios cuando crece la carga.
+
+Con este nivel de detalle ves cómo cada capa tiene un rol preciso y cómo juntas forman una arquitectura robusta, mantenible y de alto rendimiento, tal como la usan en proyectos profesionales.

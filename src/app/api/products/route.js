@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
 import { ProductService } from '../../services/productService';
+import { min } from 'date-fns';
 
 export async function GET(request) {
   const url = new URL(request.url);
   const filters = {
     stock: url.searchParams.has('stock') ? Number(url.searchParams.get('stock')) : undefined,
-    proveedorNombre: url.searchParams.get('proveedorNombre') || undefined
+    proveedorNombre: url.searchParams.get('proveedorNombre') || undefined,
+    minPrice: url.searchParams.has('minPrice') ? Number(url.searchParams.get('minPrice')) : undefined,
+    maxPrice: url.searchParams.has('maxPrice') ? Number(url.searchParams.get('maxPrice')) : undefined,
   };
 
   try {

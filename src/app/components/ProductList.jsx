@@ -11,6 +11,8 @@ export default function ProductsList() {
   const filters = {
     stock: sp.get("stock") ?? undefined,
     proveedorNombre: sp.get("proveedorNombre") ?? undefined,
+    minPrice: sp.get("minPrice") ? Number(sp.get("minPrice")) : undefined,
+    maxPrice: sp.get("maxPrice") ? Number(sp.get("maxPrice")) : undefined,
   };
 
   const entries = Object.entries(filters).filter(([, v]) => v !== undefined && v !== "");

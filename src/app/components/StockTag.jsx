@@ -5,3 +5,19 @@ export default function StockTag() {
       </span>
     );
   }
+
+// components/StockTag.tsx
+// import Image from 'next/image'
+
+// export default function StockTag() {
+//   return (
+//     <div className="absolute top-2 left-2 w-20 h-20">  
+//       <Image
+//         src="/images/Enro Blanco.png"
+//         alt="Sin Stock"
+//         layout="fill"
+//         objectFit="contain"
+//       />
+//     </div>
+//   )
+// }
