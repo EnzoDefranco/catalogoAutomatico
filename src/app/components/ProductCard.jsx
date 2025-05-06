@@ -63,6 +63,10 @@ export default function ProductCard({ product }) {
         <br />
         UxB | {product.unidadesPorBulto}
         <br />
+        UxD | {product.unidadesPorDisplay}
+        <br />
+        BxP | {product.bultosPorPallets}
+        <br />
         Stock: {product.stock} unidades
         <br />
         Ult modificación: {fechaFormateada}
@@ -91,7 +95,7 @@ export default function ProductCard({ product }) {
 
       {/* Precio final calculado */}
       <p className="text-base font-bold mb-4">
-        Precio final: ${precioFinal.toFixed(2)}
+        Precio final +IVA: ${precioFinal.toFixed(2)}
       </p>
 
       {/* Botón */}
