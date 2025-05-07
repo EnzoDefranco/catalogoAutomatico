@@ -1,8 +1,11 @@
 
 import StockTag from "./StockTag";
+import GramajeRibbon from "./GramajeRibbon";
+import CategoryBadge from "./CategoryBadge";
 import Badge from "./Badge";
 import { parseISO, format } from "date-fns";
 import { useState } from "react";
+import Image from 'next/image'
 
 
 
@@ -28,9 +31,25 @@ export default function ProductCard({ product }) {
   const precioFinal = (costoManual / (1 - margen)) * 1.21;
 
   return (
-    <div className="relative flex flex-col justify-between w-full h-[750px] rounded-3xl bg-white p-5 text-center shadow-md transition hover:shadow-lg">
+    <div className="relative flex flex-col justify-between w-full h-[550px] rounded-3xl bg-white p-5 text-center shadow-md transition hover:shadow-lg">
       {/* Etiqueta “Sin Stock” */}
-      {isOutOfStock && <StockTag />}
+      {/* {isOutOfStock && <StockTag />} */}
+
+            <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-1">
+        {/* sólo mostramos el badge de “Sin Stock” cuando isOutOfStock */}
+        {isOutOfStock && <StockTag />}
+        {/* la categoría SIEMPRE va debajo del stock (o sola si hay stock) */}
+        <CategoryBadge className="ml-0">
+          {product.division}
+        </CategoryBadge>
+      </div>
+
+
+      
+        {/* Etiqueta de gramaje */}
+        <GramajeRibbon gramaje={product.kilosUnitarios} />
+
+      {/* Etiqueta de nuevo */}
 
       {/* Imagen */}
       <img
@@ -97,15 +116,10 @@ export default function ProductCard({ product }) {
       <p className="text-base font-bold mb-4">
         Precio final +IVA: ${precioFinal.toFixed(2)}
       </p>
+      <div className="mt-4 flex justify-center">
+</div>
 
-      {/* Botón */}
-      <div>
-        <button className="w-full rounded-full bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-600">
-          INICIÁ SESIÓN
-          <br />
-          para ver precio
-        </button>
-      </div>
+
     </div>
   );
 }
