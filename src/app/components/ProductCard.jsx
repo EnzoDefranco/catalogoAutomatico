@@ -20,7 +20,7 @@ export default function ProductCard({ product }) {
 
 
   return (
-    <div className="relative flex flex-col justify-between w-full h-[550px] rounded-3xl bg-white p-5 text-center shadow-md transition hover:shadow-lg">
+    <div className="relative h-full w-full flex flex-col justify-between rounded-3xl bg-white p-5 text-center shadow-md transition hover:shadow-lg">
 
 
       <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-1">
@@ -34,7 +34,7 @@ export default function ProductCard({ product }) {
       <img
         src={`../images/${eanUnidad}.png`}
         alt={product.descripcion}
-        className="w-[150px] h-auto mx-auto"
+        className="w-[200px] h-[200px] mx-auto"
         loading="lazy"
       />
       <h3 className="text-sm font-semibold text-gray-900  mb-1">{descripcion}</h3>
@@ -51,7 +51,7 @@ export default function ProductCard({ product }) {
       </p>
 
            
-      <div className="mb-4">
+      <div className="mt-auto mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Margen: {(margen * 100).toFixed(0)}%
         </label>
@@ -69,6 +69,7 @@ export default function ProductCard({ product }) {
       {/* Precio final calculado */}
       <p className="text-base font-bold mb-4">Precio final +IVA: ${precioFinal.toFixed(2)}</p>
       <div className="mt-4 flex justify-center"></div>
+
     </div>
   );
 }
