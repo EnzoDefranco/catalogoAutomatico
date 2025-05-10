@@ -53,13 +53,12 @@ export default function ProductCard({ product }) {
 
       {/* Imagen */}
       <img
-        src="../images/prueba.jpg"
+        src={`../images/${product.eanUnidad}.png`}
         alt={product.descripcion}
         className="w-[150px] h-auto mx-auto"
         loading="lazy"
         
       />
-
 
       {/* Nombre */}
       <h3 className="text-sm font-semibold text-gray-900  mb-1">
