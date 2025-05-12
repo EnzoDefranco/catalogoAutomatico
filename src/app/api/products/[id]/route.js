@@ -1,25 +1,26 @@
-import { NextResponse } from 'next/server';
-import { ProductService } from '../../../services/productService';
+import { NextResponse } from "next/server";
+import { ProductService } from "@/app/services/productService";
 
+export async function GET(request) {
+  const url = new URL(request.url);
 
-// Aquí sí recibimos params
-export async function GET(request, { params }) {
-  // 1) validamos y parseamos el id
-  const id = parseInt(params.id, 10);
-  if (isNaN(id)) {
-    return NextResponse.json({ error: 'ID inválido' }, { status: 400 });
-  }
+  // Multi‑select → .getAll()
+  const proveedores = url.searchParams.getAll("proveedorNombre");
+  const divisiones  = url.searchParams.getAll("division");
+
+  const filters = {
+    minPrice:        url.searchParams.has("minPrice") ? Number(url.searchParams.get("minPrice")) : undefined,
+    maxPrice:        url.searchParams.has("maxPrice") ? Number(url.searchParams.get("maxPrice")) : undefined,
+    stock:           url.searchParams.has("stock")    ? Number(url.searchParams.get("stock"))    : undefined,
+  };
+  if (proveedores.length) filters.proveedorNombre = proveedores;
+  if (divisiones.length)  filters.division        = divisiones;
 
   try {
-    // 2) invocamos el service de "findById"
-    const product = await ProductService.findById(id);
-    if (!product) {
-      return NextResponse.json({ error: 'No encontrado' }, { status: 404 });
-    }
-    // 3) devolvemos un objeto consistente
-    return NextResponse.json({ data: product });
-  } catch (error) {
-    console.error(error);
-   return NextResponse.json({ error: 'Error interno' }, { status: 500 });
+    const data = await ProductService.findAll(filters);
+    return NextResponse.json({ data, meta: { total: data.length } });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: "Error interno" }, { status: 500 });
   }
 }

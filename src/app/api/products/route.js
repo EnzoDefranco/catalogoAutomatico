@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ProductService } from '../../services/productService';
-import { min } from 'date-fns';
+
 
 export async function GET(request) {
   const url = new URL(request.url);
@@ -9,7 +9,10 @@ export async function GET(request) {
     proveedorNombre: url.searchParams.get('proveedorNombre') || undefined,
     minPrice: url.searchParams.has('minPrice') ? Number(url.searchParams.get('minPrice')) : undefined,
     maxPrice: url.searchParams.has('maxPrice') ? Number(url.searchParams.get('maxPrice')) : undefined,
-  };
+    division: url.searchParams.get('division') || undefined,
+    kilosUnitarios: url.searchParams.getAll("kilosUnitarios"), // Nuevo filtro
+
+    };
 
   try {
     const data = await ProductService.findAll(filters);
