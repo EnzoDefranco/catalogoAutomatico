@@ -21,5 +21,30 @@ export async function GET() {
      WHERE kilosUnitarios IS NOT NULL
      GROUP BY kilosUnitarios`
   );
-  return NextResponse.json({ brands, categories, kilosUnitarios });
+
+  const rubro = await conn.query(
+    `SELECT rubroDescripcion AS value, COUNT(*) AS count
+     FROM articulosl4
+     WHERE rubroDescripcion IS NOT NULL
+     GROUP BY rubroDescripcion`
+  );
+
+  // linea
+  const linea = await conn.query(
+    `SELECT linea AS value, COUNT(*) AS count
+     FROM articulosl4
+     WHERE linea IS NOT NULL
+     GROUP BY linea`
+  );
+
+  // fabrica  
+  const fabrica = await conn.query(
+    `SELECT fabrica AS value, COUNT(*) AS count
+     FROM articulosl4
+     WHERE fabrica IS NOT NULL
+     GROUP BY fabrica`
+  );
+
+
+  return NextResponse.json({ brands, categories, kilosUnitarios, rubro, linea, fabrica});
 }

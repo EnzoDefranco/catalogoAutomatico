@@ -16,7 +16,10 @@ export default function CatalogoPage() {
     stock:           sp.get("stock") ? Number(sp.get("stock")) : undefined,
     proveedorNombre: sp.getAll("proveedorNombre"),
     division:        sp.getAll("division"),
-  kilosUnitarios: sp.getAll("kilosUnitarios").length > 0 ? sp.getAll("kilosUnitarios") : undefined, // Verifica si está vacío
+  kilosUnitarios: sp.getAll("kilosUnitarios").length > 0 ? sp.getAll("kilosUnitarios") : undefined, // Verifica si está vacío}
+    rubro:           sp.getAll("rubro").length > 0 ? sp.getAll("rubro") : undefined, // Verifica si está vacío
+    linea:           sp.getAll("linea").length > 0 ? sp.getAll("linea") : undefined, // Verifica si está vacío
+    fabrica:         sp.getAll("fabrica").length > 0 ? sp.getAll("fabrica") : undefined, // Verifica si está vacío
 
 
   }
