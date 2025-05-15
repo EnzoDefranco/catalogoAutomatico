@@ -11,9 +11,9 @@ export async function GET(request) {
     maxPrice: url.searchParams.has('maxPrice') ? Number(url.searchParams.get('maxPrice')) : undefined,
     division: url.searchParams.get('division') || undefined,
     kilosUnitarios: url.searchParams.getAll("kilosUnitarios"), // Nuevo filtro
-    rubro: url.searchParams.get("rubro"), // Nuevo filtro
     linea: url.searchParams.get("linea"), // Nuevo filtro
     fabrica: url.searchParams.get("fabrica"), // Nuevo filtro
+    rubroDescripcion: url.searchParams.getAll("rubroDescripcion"),
 
 
     };

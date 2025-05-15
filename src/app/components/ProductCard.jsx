@@ -4,6 +4,7 @@ import GramajeRibbon from "./GramajeRibbon";
 import CategoryBadge from "./CategoryBadge";
 import useFormattedDate from "../hooks/useFormattedDate";
 import { useMargin } from "../hooks/useMargin";
+import { useCart } from "./CartContext";
 
 
 
@@ -15,6 +16,7 @@ export default function ProductCard({ product }) {
   const isOutOfStock = product.stock === 0; // IsOutOfStock es un booleano que indica si el producto está fuera de stock o no
   const fecha = useFormattedDate(product.ultModificacion);
   const {margen, setMargen, precioFinal} = useMargin(costoManual, precioLista4);
+  const { addToCart } = useCart();
 
 
 
@@ -68,6 +70,17 @@ export default function ProductCard({ product }) {
 
       {/* Precio final calculado */}
       <p className="text-base font-bold mb-4">Precio final +IVA: ${precioFinal.toFixed(2)}</p>
+      <button
+        className={`w-full rounded-lg bg-blue-500 py-2 text-white font-semibold transition hover:bg-blue-600 ${isOutOfStock ? "opacity-50 cursor-not-allowed" : ""}`}
+        onClick={() => {
+          if (!isOutOfStock) {
+            addToCart(product, precioFinal);
+          }
+        }}
+        disabled={isOutOfStock}
+      >
+        {isOutOfStock ? "Sin Stock" : "Agregar al carrito"}
+      </button>
       <div className="mt-4 flex justify-center"></div>
 
     </div>

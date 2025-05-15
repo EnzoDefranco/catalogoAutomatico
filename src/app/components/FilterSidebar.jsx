@@ -12,10 +12,10 @@ export default function FilterSidebar() {
       <h2 className="text-lg font-semibold">Filtros</h2>
       <CheckboxFilter title="Marca" paramKey="proveedorNombre" options={data.brands || []} />
       <CheckboxFilter title="Categoría" paramKey="division" options={data.categories || []} />
-      <CheckboxFilter title="Rubro" paramKey="rubro" options={data.rubro || []} />
       <CheckboxFilter title="Kilos Unitarios" paramKey="kilosUnitarios" options={data.kilosUnitarios || []} />
       <CheckboxFilter title="Línea" paramKey="linea" options={data.linea || []} />
       <CheckboxFilter title="Fábrica" paramKey="fabrica" options={data.fabrica || []} />
+      <CheckboxFilter title="Rubro" paramKey="rubroDescripcion" options={data.rubroDescripcion || []} />
 
     </aside>
   );

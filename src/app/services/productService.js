@@ -2,6 +2,7 @@ import { conn } from "@/app/libs/mysql";
 
 export const ProductService = {
   async findAll(filters = {}) {
+    console.log("filtros recibidos:", filters);
     let sql = "SELECT * FROM articulosl4";
     const clauses = [], params = [];
 
@@ -34,43 +35,34 @@ export const ProductService = {
     if (filters.kilosUnitarios && filters.kilosUnitarios.length > 0) {
     const placeholders = filters.kilosUnitarios.map(() => "?").join(",");
     clauses.push(`kilosUnitarios IN (${placeholders})`);
-    params.push(...filters.kilosUnitarios);
-  }
+    params.push(...filters.kilosUnitarios);}
+    
+    //array para linea
+    if (filters.linea) {
+      const arr = Array.isArray(filters.linea)
+        ? filters.linea
+        : [filters.linea];
+      const ph = arr.map(() => "?").join(",");
+      clauses.push(`linea IN (${ph})`);
+      params.push(...arr);
+    }
 
-  //Array de rubro similar a kilosUnitarios
-  if (filters.rubroDescripcion) {
-    const arr = Array.isArray(filters.rubroDescripcion)
-      ? filters.rubroDescripcion
-      : [filters.rubroDescripcion];
-    const ph = arr.map(() => "?").join(",");
-    clauses.push(`rubroDescripcion IN (${ph})`);
-    params.push(...arr);
-  }
-
-  //array para linea
-  if (filters.linea) {
-    const arr = Array.isArray(filters.linea)
-      ? filters.linea
-      : [filters.linea];
-    const ph = arr.map(() => "?").join(",");
-    clauses.push(`linea IN (${ph})`);
-    params.push(...arr);
-  }
-
-  //array para fabrica
-  if (filters.fabrica) {
-    const arr = Array.isArray(filters.fabrica)
-      ? filters.fabrica
-      : [filters.fabrica];
-    const ph = arr.map(() => "?").join(",");
-    clauses.push(`fabrica IN (${ph})`);
-    params.push(...arr);
-  }
+    //array para fabrica
+    if (filters.fabrica) {
+      const arr = Array.isArray(filters.fabrica)
+        ? filters.fabrica
+        : [filters.fabrica];
+      const ph = arr.map(() => "?").join(",");
+      clauses.push(`fabrica IN (${ph})`);
+      params.push(...arr);
+    }
 
 
-    if (clauses.length) sql += " WHERE " + clauses.join(" AND ");
-    return await conn.query(sql, params);
-  },
+
+
+      if (clauses.length) sql += " WHERE " + clauses.join(" AND ");
+      return await conn.query(sql, params);
+    },
 
   async findById(id) {
     const rows = await conn.query(

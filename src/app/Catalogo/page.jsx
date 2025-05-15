@@ -5,6 +5,7 @@
 import ProductList from "../components/ProductList";
 import FilterSidebar from "../components/FilterSidebar";
 import { useSearchParams } from "next/navigation";
+import CartSidebar from "../components/CartSidebar";
 
 
 
@@ -16,15 +17,14 @@ export default function CatalogoPage() {
     stock:           sp.get("stock") ? Number(sp.get("stock")) : undefined,
     proveedorNombre: sp.getAll("proveedorNombre"),
     division:        sp.getAll("division"),
-  kilosUnitarios: sp.getAll("kilosUnitarios").length > 0 ? sp.getAll("kilosUnitarios") : undefined, // Verifica si está vacío}
-    rubro:           sp.getAll("rubro").length > 0 ? sp.getAll("rubro") : undefined, // Verifica si está vacío
+    kilosUnitarios: sp.getAll("kilosUnitarios").length > 0 ? sp.getAll("kilosUnitarios") : undefined, // Verifica si está vacío}
     linea:           sp.getAll("linea").length > 0 ? sp.getAll("linea") : undefined, // Verifica si está vacío
     fabrica:         sp.getAll("fabrica").length > 0 ? sp.getAll("fabrica") : undefined, // Verifica si está vacío
-
-
+    rubroDescripcion: sp.getAll("rubroDescripcion").length > 0 ? sp.getAll("rubroDescripcion") : undefined, // Verifica si está vacío
   }
   return (
     <div className="container mx-auto mt-5 pb-10">
+      <CartSidebar />
       <h1 className="text-2xl font-bold mb-4">Catálogo de Productos</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-2">

@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "./components/CartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,27 +23,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* <div className="bg-gray-100 min-h-screen flex flex-col">
-          <header className="bg-white shadow">
-            <div className="container mx-auto px-4 py-4">
-              <h1 className="text-2xl font-bold">Mi Aplicación</h1>
-            </div>
-          </header>
-          <main className="flex-grow container mx-auto px-4 py-4">
-            <h2 className="text-xl font-semibold mb-4">Bienvenido</h2>
-            <p className="text-gray-700"> Aquí va el contenido de la aplicación.</p>
-          </main>
-          <footer className="bg-white shadow mt-4">
-            <div className="container mx-auto px-4 py-4">       
-              <p className="text-center text-gray-600">
-                &copy; {new Date().getFullYear()} Mi Aplicación. Todos los derechos reservados.
-              </p>
-            </div>
-          </footer>
-        </div> */}
-        {/* Aquí se renderiza el contenido de las páginas */} 
-
-        <div className="h-[calc(100vh-5rem)] px-4 sm:px-6 md:px-8 pt-6">{children}</div>
+        <CartProvider>
+          <div className="h-[calc(100vh-5rem)] px-4 sm:px-6 md:px-8 pt-6">{children}</div>
+        </CartProvider>
       </body>
     </html>
   );
