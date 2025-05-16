@@ -19,7 +19,7 @@ export default function CatalogoPage() {
     division:        sp.getAll("division"),
     kilosUnitarios: sp.getAll("kilosUnitarios").length > 0 ? sp.getAll("kilosUnitarios") : undefined, // Verifica si está vacío}
     linea:           sp.getAll("linea").length > 0 ? sp.getAll("linea") : undefined, // Verifica si está vacío
-    fabrica:         sp.getAll("fabrica").length > 0 ? sp.getAll("fabrica") : undefined, // Verifica si está vacío
+    fabrica:         sp.getAll("fabrica").length > 0 ? sp.getAll("fabrica") : undefined,// Verifica si está vacío
     rubroDescripcion: sp.getAll("rubroDescripcion").length > 0 ? sp.getAll("rubroDescripcion") : undefined, // Verifica si está vacío
   }
   return (

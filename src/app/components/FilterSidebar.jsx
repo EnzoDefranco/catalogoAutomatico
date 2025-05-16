@@ -16,7 +16,6 @@ export default function FilterSidebar() {
       <CheckboxFilter title="Línea" paramKey="linea" options={data.linea || []} />
       <CheckboxFilter title="Fábrica" paramKey="fabrica" options={data.fabrica || []} />
       <CheckboxFilter title="Rubro" paramKey="rubroDescripcion" options={data.rubroDescripcion || []} />
-
     </aside>
   );
 }

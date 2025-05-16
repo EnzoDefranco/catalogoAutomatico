@@ -1,3 +1,4 @@
+//ProductService.findAll recibe ese filters, arma dinámicamente las cláusulas SQL y solo añade al WHERE los filtros que no sean undefined.
 import { conn } from "@/app/libs/mysql";
 
 export const ProductService = {
@@ -57,7 +58,14 @@ export const ProductService = {
       params.push(...arr);
     }
 
-
+    if (filters.rubroDescripcion) {
+      const arr = Array.isArray(filters.rubroDescripcion)
+        ? filters.rubroDescripcion
+        : [filters.rubroDescripcion];
+      const ph = arr.map(() => '?').join(',');
+      clauses.push(`rubroDescripcion IN (${ph})`);
+      params.push(...arr);
+    }
 
 
       if (clauses.length) sql += " WHERE " + clauses.join(" AND ");

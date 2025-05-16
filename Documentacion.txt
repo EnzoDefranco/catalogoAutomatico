@@ -119,3 +119,38 @@ Rendimiento	Pool de conexiones + SWR caching + navegación SPA.
 Escalabilidad	API Routes pueden extraerse a micro‑servicios cuando crece la carga.
 
 Con este nivel de detalle ves cómo cada capa tiene un rol preciso y cómo juntas forman una arquitectura robusta, mantenible y de alto rendimiento, tal como la usan en proyectos profesionales.
+
+
+
+En resumen, al agregar un nuevo filtro debes tocar tres lugares:
+
+Ruta API (route.js)
+
+Qué hace: lee ?miFiltro=… de la URL y lo convierte en filters.miFiltro.
+
+Paso: usa getAll('miFiltro') (o get('miFiltro') si es único), convierte array vacío a undefined y añade a filters.
+
+Servicio SQL (productService.js)
+
+Qué hace: traduce filters.miFiltro en cláusula SQL.
+
+Paso: en findAll, añade
+
+js
+Copiar
+Editar
+if (filters.miFiltro) {
+  clauses.push(`miFiltro IN (${placeholders})`);
+  params.push(...filters.miFiltro);
+}
+antes de concatenar el WHERE.
+
+Front-end
+
+Facets (/api/products/facets): incluye un query que devuelva { value, count } para ese campo.
+
+Sidebar (FilterSidebar.jsx): agrega <CheckboxFilter title="Mi Filtro" paramKey="miFiltro" options={data.miFiltro} />.
+
+Página (CatalogoPage.jsx): lee sp.getAll('miFiltro') y lo agrega a filters para pasarlo a ProductsList, que ya arma la URL con todos los arrays.
+
+Con esos tres toques—ruta, servicio y front (facets+sidebar+page)—tu nuevo filtro funcionará end-to-end.

@@ -39,13 +39,14 @@ export async function GET() {
      GROUP BY fabrica`
   );
 
-  //rubroDescripcion
   const rubroDescripcion = await conn.query(
     `SELECT rubroDescripcion AS value, COUNT(*) AS count
      FROM articulosl4
      WHERE rubroDescripcion IS NOT NULL
      GROUP BY rubroDescripcion`
   );
+
+
 
 
   return NextResponse.json({ brands, categories, kilosUnitarios, linea, fabrica,rubroDescripcion});
