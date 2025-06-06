@@ -39,6 +39,9 @@ export default function ProductsList({ filters }) {
       params.append(key, String(value));
     }
   });
+  if (filters.descripcion) {
+    params.set("descripcion", filters.descripcion);
+  }
   const qs = params.toString();
   const { data, error } = useSWR(`/api/products?${qs}`, fetcher);
 
