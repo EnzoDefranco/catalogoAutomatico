@@ -4,6 +4,7 @@
 
 import ProductList from "../components/ProductList";
 import FilterSidebar from "../components/FilterSidebar";
+import SearchBar from "../components/SearchBar";
 import { useSearchParams } from "next/navigation";
 import CartSidebar from "../components/CartSidebar";
 
@@ -17,6 +18,7 @@ export default function CatalogoPage() {
     stock:           sp.get("stock") ? Number(sp.get("stock")) : undefined,
     proveedorNombre: sp.getAll("proveedorNombre"),
     division:        sp.getAll("division"),
+    descripcion:     sp.get("descripcion") || undefined,
     kilosUnitarios: sp.getAll("kilosUnitarios").length > 0 ? sp.getAll("kilosUnitarios") : undefined, // Verifica si está vacío}
     linea:           sp.getAll("linea").length > 0 ? sp.getAll("linea") : undefined, // Verifica si está vacío
     fabrica:         sp.getAll("fabrica").length > 0 ? sp.getAll("fabrica") : undefined,// Verifica si está vacío
@@ -26,6 +28,9 @@ export default function CatalogoPage() {
     <div className="container mx-auto mt-5 pb-10">
       <CartSidebar />
       <h1 className="text-2xl font-bold mb-4">Catálogo de Productos</h1>
+      <div className="mb-4">
+        <SearchBar />
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-2">
         <aside className="space-y-6 relative top-20">
