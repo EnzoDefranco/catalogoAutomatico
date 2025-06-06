@@ -9,6 +9,8 @@ export async function GET(request) {
   const lineaArr   = url.searchParams.getAll('linea');
   const fabricaArr = url.searchParams.getAll('fabrica');
   const rubrosArr  = url.searchParams.getAll('rubroDescripcion');
+  const descripcion = url.searchParams.get('descripcion');
+
 
   // 2) Construye filters convirtiendo arrays vacíos en undefined
   const filters = {
@@ -17,6 +19,8 @@ export async function GET(request) {
     minPrice:        url.searchParams.has('minPrice')  ? Number(url.searchParams.get('minPrice')) : undefined,
     maxPrice:        url.searchParams.has('maxPrice')  ? Number(url.searchParams.get('maxPrice')) : undefined,
     division:        url.searchParams.get('division')   || undefined,
+    descripcion:     descripcion || undefined,
+
 
     kilosUnitarios:  kilosArr.length   > 0 ? kilosArr   : undefined,
     linea:           lineaArr.length   > 0 ? lineaArr   : undefined,

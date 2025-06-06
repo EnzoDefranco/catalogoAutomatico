@@ -38,8 +38,8 @@ export default function CartSidebar() {
           ) : (
             <>
               <ul>
-                {cart.map(item => (
-                  <li key={item.idArticulo} className="flex justify-between items-center mb-2">
+                {cart.map((item, index) => (
+                  <li key={`${item.idArticulo}-${index}`} className="flex justify-between items-center mb-2">
                     <span>{item.descripcion}</span>
                     <span>${item.precioFinal.toFixed(2)}</span>
                     <button

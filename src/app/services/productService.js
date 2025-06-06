@@ -23,6 +23,11 @@ export const ProductService = {
       params.push(filters.stock);
     }
 
+    if (filters.descripcion) {
+      clauses.push("descripcion LIKE ?");
+      params.push(`%${filters.descripcion}%`);
+    }
+
     // proveedorNombre puede ser string o array
     if (filters.proveedorNombre) {
       const arr = Array.isArray(filters.proveedorNombre)
