@@ -3,7 +3,7 @@ import { useCart } from "./CartContext";
 import { useState } from "react";
 
 export default function CartSidebar() {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, updateQuantity } = useCart();
   const [open, setOpen] = useState(false);
 
   return (
@@ -13,7 +13,7 @@ export default function CartSidebar() {
         className="fixed top-6 right-6 z-40 bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition"
         onClick={() => setOpen(true)}
       >
-        🛒 Carrito ({cart.length})
+        🛒 Carrito ({cart.reduce((s, i) => s + i.cantidad, 0)})
       </button>
 
       {/* Sidebar */}
@@ -37,22 +37,55 @@ export default function CartSidebar() {
             <div>Carrito vacío</div>
           ) : (
             <>
-              <ul>
+              <ul className="space-y-2">
                 {cart.map((item, index) => (
-                  <li key={`${item.idArticulo}-${index}`} className="flex justify-between items-center mb-2">
-                    <span>{item.descripcion}</span>
-                    <span>${item.precioFinal.toFixed(2)}</span>
+                  <li
+                    key={`${item.idArticulo}-${index}`}
+                    className="flex items-center justify-between"
+                  >
+                    <img
+                      src={`/images/${item.eanUnidad}.png`}
+                      alt={item.descripcion}
+                      className="w-12 h-12 object-contain mr-2"
+                    />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{item.descripcion}</p>
+                      <p className="text-xs text-gray-500">
+                        ${item.precioFinal.toFixed(2)} c/u
+                      </p>
+                    </div>
+                    <div className="flex items-center">
+                      <button
+                        className="px-2 text-xl"
+                        onClick={() => updateQuantity(item.idArticulo, item.cantidad - 1)}
+                      >
+                        -
+                      </button>
+                      <span className="px-2">{item.cantidad}</span>
+                      <button
+                        className="px-2 text-xl"
+                        onClick={() => updateQuantity(item.idArticulo, item.cantidad + 1)}
+                      >
+                        +
+                      </button>
+                    </div>
                     <button
                       className="ml-2 text-red-500"
                       onClick={() => removeFromCart(item.idArticulo)}
                     >
-                      Quitar
+                      ✕
                     </button>
                   </li>
                 ))}
               </ul>
-              <div className="font-bold mt-2">
-                Total: ${cart.reduce((sum, item) => sum + item.precioFinal, 0).toFixed(2)}
+              <div className="font-bold mt-4 text-right">
+                Total: $
+                {cart
+                  .reduce(
+                    (sum, item) => sum + item.precioFinal * item.cantidad,
+                    0
+                  )
+                  .toFixed(2)}                
               </div>
             </>
           )}
