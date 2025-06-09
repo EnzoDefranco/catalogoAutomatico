@@ -1,25 +1,40 @@
-import { NextResponse } from "next/server";
-import {conn} from  "@/app/libs/mysql";
+import { NextResponse } from 'next/server';
+import { ProductService } from '../../services/productService';
+
+export async function GET(request) {
+  const url = new URL(request.url);
+
+  // 1) Extrae cada parámetro multi-valor con getAll()
+  const kilosArr   = url.searchParams.getAll('kilosUnitarios');
+  const lineaArr   = url.searchParams.getAll('linea');
+  const fabricaArr = url.searchParams.getAll('fabrica');
+  const rubrosArr  = url.searchParams.getAll('rubroDescripcion');
+  const descripcion = url.searchParams.get('descripcion');
 
 
-// export async function GET() {
-//     // return NextResponse.json({ message: "Soy el ID de la api de articulos" });
-//     const results = await conn.query("SELECT NOW()");
-//     console.log(results);
-//     return NextResponse.json({ message: results[0]['NOW()'] });
-// }
+  // 2) Construye filters convirtiendo arrays vacíos en undefined
+  const filters = {
+    stock:           url.searchParams.has('stock')     ? Number(url.searchParams.get('stock')) : undefined,
+    proveedorNombre: url.searchParams.get('proveedorNombre') || undefined,
+    minPrice:        url.searchParams.has('minPrice')  ? Number(url.searchParams.get('minPrice')) : undefined,
+    maxPrice:        url.searchParams.has('maxPrice')  ? Number(url.searchParams.get('maxPrice')) : undefined,
+    division:        url.searchParams.get('division')   || undefined,
+    descripcion:     descripcion || undefined,
 
-export async function GET() {
-    try {
-        const results = await conn.query("SELECT * FROM articulosl4");
-        return NextResponse.json(results);
-    } catch (error) {
-        return NextResponse.json(
-            {
-                error: "Error al obtener los articulos",
-                message: error.message,
-            },
-            { status: 500 }
-        );      
-    }
+
+    kilosUnitarios:  kilosArr.length   > 0 ? kilosArr   : undefined,
+    linea:           lineaArr.length   > 0 ? lineaArr   : undefined,
+    fabrica:         fabricaArr.length > 0 ? fabricaArr : undefined,
+    rubroDescripcion:rubrosArr.length  > 0 ? rubrosArr  : undefined,
+  };
+
+  console.log('filters en route:', filters);
+
+  try {
+    const data = await ProductService.findAll(filters);
+    return NextResponse.json({ data, meta: { total: data.length } });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: 'Error al obtener productos' }, { status: 500 });
+  }
 }
