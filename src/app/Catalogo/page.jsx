@@ -7,6 +7,8 @@ import FilterSidebar from "../components/FilterSidebar";
 import { useSearchParams } from "next/navigation";
 import CartSidebar from "../components/CartSidebar";
 import SearchBar from "../components/SearchBar";
+import ActiveFilters from "../components/ActiveFilters";
+
 
 
 
@@ -38,6 +40,8 @@ export default function CatalogoPage() {
         </aside>
 
         <section>
+
+          <ActiveFilters />
           <ProductList filters={filters} />
         </section>
       </div>
